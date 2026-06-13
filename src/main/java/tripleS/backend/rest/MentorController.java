@@ -3,40 +3,90 @@ package tripleS.backend.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import tripleS.backend.dto.MentorRegisterDTO;
 import tripleS.backend.entity.Mentor;
 import tripleS.backend.entity.User;
 import tripleS.backend.repository.mentorRepo;
+import tripleS.backend.repository.userRepo;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/mentors")
 @CrossOrigin(origins = "http://localhost:5173")
 public class MentorController {
+
     @Autowired
     private mentorRepo mentorRepository;
-    MentorController(mentorRepo mr){
+
+    @Autowired
+    private userRepo userRepository;
+
+    MentorController(mentorRepo mr, userRepo ur) {
         this.mentorRepository = mr;
+        this.userRepository = ur;
     }
+
     @GetMapping
     public List<Mentor> getAllMentors() {
         return mentorRepository.findAll();
     }
 
-    // 2. Get a single mentor by ID
     @GetMapping("/{id}")
     public ResponseEntity<Mentor> getMentorById(@PathVariable Long id) {
         return mentorRepository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-    // 3. Fetch all assigned clients for a specific mentor by their User ID
+
     @GetMapping("/clients")
     public ResponseEntity<List<User>> getMyClients(@RequestParam Long userId) {
         List<User> clients = mentorRepository.findClientsByMentorUserId(userId);
         return ResponseEntity.ok(clients);
     }
 
+    @PostMapping("/register-full")
+    public ResponseEntity<?> registerMentor(
+            @RequestBody MentorRegisterDTO dto) {
 
+        if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
+            return ResponseEntity.badRequest()
+                    .body("Cet email existe déjà.");
+        }
+
+        // Create User
+        User user = new User();
+
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
+
+        // use BCrypt if you already have it
+        user.setPassword(dto.getPassword());
+
+        user.setRole("MENTOR");
+        user.setSelectedTier("GRATUIT");
+
+        User savedUser = userRepository.save(user);
+
+        // Create Mentor
+        Mentor mentor = new Mentor();
+
+        mentor.setUser(savedUser);
+
+
+        mentor.setName(dto.getName());
+        mentor.setEmail(dto.getEmail());
+
+        mentor.setTitle(dto.getTitle());
+        mentor.setExpertise(dto.getExpertise());
+        mentor.setBio(dto.getBio());
+
+        mentor.setLinkedinUrl(dto.getLinkedinUrl());
+        mentor.setImageUrl(dto.getImageUrl());
+
+        mentorRepository.save(mentor);
+
+        return ResponseEntity.ok(savedUser);
+    }
 }
