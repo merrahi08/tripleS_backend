@@ -40,6 +40,14 @@ public class IncubationRequestController {
                 requestService.getUserPendingRequests(userId)
         );
     }
+    @GetMapping("/mentor/{userId}/pending")
+    public ResponseEntity<List<IncubationRequest>> getMentorPendingRequests(
+            @PathVariable Long userId) {
+
+        return ResponseEntity.ok(
+                requestService.getMentorPendingRequests(userId)
+        );
+    }
 
     @PutMapping("/{requestId}/claim")
     public ResponseEntity<?> claimRequest(

@@ -24,6 +24,14 @@ public interface IncubationRequestRepository extends JpaRepository<IncubationReq
             RequestStatus status
     );
     List<IncubationRequest> findByMentorId(Long mentorId);
+    List<IncubationRequest> findByMentor_IdAndStatus(
+            Long mentorId,
+            RequestStatus status
+    );
+    List<IncubationRequest> findByMentor_User_IdAndStatus(
+            Long userId,
+            RequestStatus status
+    );
 //    @Query("SELECT r FROM IncubationRequest r, Mentor m WHERE r.mentorId = m.id AND m.user.id = :userId AND r.status = tripleS.backend.entity.RequestStatus.PENDING")
 //    List<IncubationRequest> findPendingRequestsByMentorUserId(@Param("userId") Long userId);
 }

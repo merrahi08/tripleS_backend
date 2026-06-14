@@ -52,6 +52,12 @@ public class IncubationRequestService {
                 RequestStatus.PENDING
         );
     }
+    public List<IncubationRequest> getMentorPendingRequests(Long userId) {
+        return requestRepository.findByMentor_User_IdAndStatus(
+                userId,
+                RequestStatus.PENDING
+        );
+    }
 
     @Transactional
     public IncubationRequest claimRequest(Long requestId) {
