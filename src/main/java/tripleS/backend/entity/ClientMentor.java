@@ -23,7 +23,7 @@ public class ClientMentor {
     // No-arg constructor required by JPA
     public ClientMentor() {}
 
-    // Convenience constructor matching your TODO workflow
+    // Convenience constructor matching your
     public ClientMentor(Long clientId, Long mentorId, LocalDateTime assignedAt) {
         this.clientId = clientId;
         this.mentorId = mentorId;

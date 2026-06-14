@@ -1,5 +1,6 @@
 package tripleS.backend.rest;
 
+import tripleS.backend.dto.CreateRequestDTO;
 import tripleS.backend.entity.IncubationRequest;
 import tripleS.backend.repository.*;
 import org.springframework.http.ResponseEntity;
@@ -16,36 +17,43 @@ public class IncubationRequestController {
 
     private final IncubationRequestService requestService;
 
+    public IncubationRequestController(
+            IncubationRequestService requestService) {
 
-    public IncubationRequestController(IncubationRequestService requestService) {
         this.requestService = requestService;
     }
 
-    // 1. Clients hit this to post a new business incubation need
     @PostMapping("/create")
-    public ResponseEntity<IncubationRequest> createRequest(@RequestBody IncubationRequest request) {
-        return ResponseEntity.ok(requestService.createRequest(request));
+    public ResponseEntity<IncubationRequest> createRequest(
+            @RequestBody CreateRequestDTO dto) {
+
+        return ResponseEntity.ok(
+                requestService.createRequest(dto)
+        );
     }
 
-    // 2. Mentors hit this to see the active "Hub" of open proposals
-    @GetMapping("/open")
-    public ResponseEntity<List<IncubationRequest>> getOpenRequests() {
-        return ResponseEntity.ok(requestService.getOpenRequests());
-    }
-    @GetMapping("/pending")
-    public ResponseEntity<List<IncubationRequest>> getMyPendingRequests(@RequestParam Long userId) {
-        List<IncubationRequest> requests = requestService.getPendingRequestsByMentorUserId(userId);
-        return ResponseEntity.ok(requests);
+    @GetMapping("/{userId}/pending")
+    public ResponseEntity<List<IncubationRequest>>
+    getUserPendingRequests(@PathVariable Long userId) {
+
+        return ResponseEntity.ok(
+                requestService.getUserPendingRequests(userId)
+        );
     }
 
-    // 3. Mentors hit this to claim an open client demand
-    @PutMapping("/{id}/claim")
-    public ResponseEntity<?> claimRequest(@PathVariable Long id, @RequestParam Long mentorId) {
+    @PutMapping("/{requestId}/claim")
+    public ResponseEntity<?> claimRequest(
+            @PathVariable Long requestId) {
+
         try {
-            IncubationRequest updated = requestService.claimRequest(id, mentorId);
+            IncubationRequest updated =
+                    requestService.claimRequest(requestId);
+
             return ResponseEntity.ok(updated);
+
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", e.getMessage()));
         }
     }
 }

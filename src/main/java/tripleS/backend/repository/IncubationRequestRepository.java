@@ -18,6 +18,12 @@ public interface IncubationRequestRepository extends JpaRepository<IncubationReq
 
     // Optional: Find requests created by a specific client
     List<IncubationRequest> findByUserId(Long userId);
-    @Query("SELECT r FROM IncubationRequest r, Mentor m WHERE r.mentorId = m.id AND m.user.id = :userId AND r.status = tripleS.backend.entity.RequestStatus.PENDING")
-    List<IncubationRequest> findPendingRequestsByMentorUserId(@Param("userId") Long userId);
+    List<IncubationRequest> findByUser_Id(Long userId);
+    List<IncubationRequest> findByUser_IdAndStatus(
+            Long userId,
+            RequestStatus status
+    );
+    List<IncubationRequest> findByMentorId(Long mentorId);
+//    @Query("SELECT r FROM IncubationRequest r, Mentor m WHERE r.mentorId = m.id AND m.user.id = :userId AND r.status = tripleS.backend.entity.RequestStatus.PENDING")
+//    List<IncubationRequest> findPendingRequestsByMentorUserId(@Param("userId") Long userId);
 }

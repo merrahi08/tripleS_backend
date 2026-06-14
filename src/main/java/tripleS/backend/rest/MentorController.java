@@ -2,6 +2,7 @@ package tripleS.backend.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import tripleS.backend.dto.MentorRegisterDTO;
@@ -22,6 +23,8 @@ public class MentorController {
 
     @Autowired
     private userRepo userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     MentorController(mentorRepo mr, userRepo ur) {
         this.mentorRepository = mr;
@@ -61,8 +64,9 @@ public class MentorController {
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
 
-        // use BCrypt if you already have it
-        user.setPassword(dto.getPassword());
+
+        String hashedPassword = passwordEncoder.encode(dto.getPassword());
+        user.setPassword(hashedPassword);
 
         user.setRole("MENTOR");
         user.setSelectedTier("GRATUIT");

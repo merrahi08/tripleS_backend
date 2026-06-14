@@ -12,28 +12,36 @@ public class IncubationRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Mentor getMentor() {
+        return mentor;
+    }
+
+    public void setMentor(Mentor mentor) {
+        this.mentor = mentor;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "mentor_id")
+    private Mentor mentor;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getMentorId() {
-        return mentorId;
-    }
-
-    public void setMentorId(Long mentorId) {
-        this.mentorId = mentorId;
     }
 
     public String getSubject() {
@@ -67,12 +75,6 @@ public class IncubationRequest {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
-
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
-
-    @Column(name = "mentor_id")
-    private Long mentorId; // Left nullable for PENDING states
 
     @Column(nullable = false, length = 150)
     private String subject;
