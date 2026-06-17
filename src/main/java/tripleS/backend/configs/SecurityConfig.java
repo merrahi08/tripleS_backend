@@ -58,32 +58,33 @@ public class SecurityConfig {
     // 4. Clean configuration allowing your React app (Port 5173) to communicate safely
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "https://triple-s-frontend-faghgk9c3-merrahi08s-projects.vercel.app"
+        ));
+
+        configuration.setAllowedMethods(List.of(
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "OPTIONS"
+        ));
+
+        configuration.setAllowedHeaders(List.of("*"));
+
         configuration.setAllowCredentials(true);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+
         source.registerCorsConfiguration("/**", configuration);
+
         return source;
     }
-    public class CorsConfig {
 
-        @Bean
-        public WebMvcConfigurer corsConfigurer() {
-            return new WebMvcConfigurer() {
-                @Override
-                public void addCorsMappings(CorsRegistry registry) {
-                    registry.addMapping("/**")
-                            .allowedOrigins(
-                                    "https://triple-s-frontend-faghgk9c3-merrahi08s-projects.vercel.app"
-                            )
-                            .allowedMethods("*")
-                            .allowedHeaders("*")
-                            .allowCredentials(true);
-                }
-            };
-        }
-    }
+
 }
