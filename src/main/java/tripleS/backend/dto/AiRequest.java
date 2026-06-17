@@ -1,3 +1,4 @@
 package tripleS.backend.dto;
 
-public record AiRequest(String prompt) {}
+public record AiRequest(String prompt) {
+}

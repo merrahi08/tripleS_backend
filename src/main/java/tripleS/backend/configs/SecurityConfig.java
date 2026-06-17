@@ -63,7 +63,8 @@ public class SecurityConfig {
 
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",
-                "https://triple-s-frontend-7khnhgvw8-merrahi08s-projects.vercel.app"
+                "https://triple-s-frontend-7khnhgvw8-merrahi08s-projects.vercel.app",
+                "https://triple-s-frontend-f048boeqc-merrahi08s-projects.vercel.app/"
         ));
 
         configuration.setAllowedMethods(List.of(
