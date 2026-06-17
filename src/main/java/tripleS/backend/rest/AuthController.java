@@ -12,7 +12,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "http://localhost:5173") // Allows your React Vite frontend to connect
 public class AuthController {
 
     private final userRepo userRepo;
