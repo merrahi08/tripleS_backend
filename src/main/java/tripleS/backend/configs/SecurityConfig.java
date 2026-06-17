@@ -77,7 +77,7 @@ public class SecurityConfig {
                 public void addCorsMappings(CorsRegistry registry) {
                     registry.addMapping("/**")
                             .allowedOrigins(
-                                    "https://triple-s-frontend-faghgk9c3-merrahi08s-projects.vercel.app/"
+                                    "https://triple-s-frontend-faghgk9c3-merrahi08s-projects.vercel.app"
                             )
                             .allowedMethods("*")
                             .allowedHeaders("*")
